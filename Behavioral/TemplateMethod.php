@@ -63,3 +63,59 @@ $circle->draw();
  * Классы Rectangle и Circle наследуют Figure и реализуют абстрактные методы для конкретной отрисовки прямоугольника и круга.
  * Клиентский код может использовать метод draw() без знания о деталях рисования конкретных фигур.
  */
+
+
+
+//  ОБЛЕГЧЁННЫЙ ПРИМЕР
+
+// Абстрактный класс с шаблонным методом
+abstract class AbstractClass {
+    // Шаблонный метод, определяющий общий алгоритм
+    public function templateMethod() {
+        $this->stepOne();
+        $this->stepTwo();
+        $this->stepThree();
+    }
+
+    // Абстрактные методы, которые должны быть реализованы в наследниках
+    abstract protected function stepOne();
+    abstract protected function stepTwo();
+    abstract protected function stepThree();
+}
+
+// Конкретный класс A
+class ConcreteClassA extends AbstractClass {
+    protected function stepOne() {
+        echo "Step One in Concrete Class A.\n";
+    }
+
+    protected function stepTwo() {
+        echo "Step Two in Concrete Class A.\n";
+    }
+
+    protected function stepThree() {
+        echo "Step Three in Concrete Class A.\n";
+    }
+}
+
+// Конкретный класс B
+class ConcreteClassB extends AbstractClass {
+    protected function stepOne() {
+        echo "Step One in Concrete Class B.\n";
+    }
+
+    protected function stepTwo() {
+        echo "Step Two in Concrete Class B.\n";
+    }
+
+    protected function stepThree() {
+        echo "Step Three in Concrete Class B.\n";
+    }
+}
+
+// Используем паттерн Шаблонный метод
+$objectA = new ConcreteClassA();
+$objectA->templateMethod();
+
+$objectB = new ConcreteClassB();
+$objectB->templateMethod();

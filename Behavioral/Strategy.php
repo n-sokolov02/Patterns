@@ -56,3 +56,50 @@ echo $imageProcessor->processImage("image.png"); // Вывод: Изображе
  * В данном примере мы создали интерфейс ImageCompression, представляющий стратегию для сжатия изображений, и две конкретные стратегии JPEGCompression и PNGCompression, реализующие этот интерфейс.
  * Затем мы создали контекст ImageProcessor, который содержит ссылку на интерфейс стратегии и использует выбранную стратегию для сжатия изображений.
  * Клиентский код может динамически менять стратегию, просто устанавливая новую стратегию через метод setCompressionStrategy().**/
+
+
+
+//  ОБЛЕГЧЁННЫЙ ПРИМЕР
+
+// Интерфейс стратегии
+interface Strategy {
+    public function execute();
+}
+
+// Конкретная стратегия A
+class ConcreteStrategyA implements Strategy {
+    public function execute() {
+        echo "Executing Strategy A.\n";
+    }
+}
+
+// Конкретная стратегия B
+class ConcreteStrategyB implements Strategy {
+    public function execute() {
+        echo "Executing Strategy B.\n";
+    }
+}
+
+// Класс контекста
+class Context {
+    private $strategy;
+
+    public function setStrategy(Strategy $strategy) {
+        $this->strategy = $strategy;
+    }
+
+    public function executeStrategy() {
+        $this->strategy->execute();
+    }
+}
+
+// Используем паттерн Стратегия
+$context = new Context();
+
+// Устанавливаем стратегию A и выполняем стратегию
+$context->setStrategy(new ConcreteStrategyA());
+$context->executeStrategy(); // Выведет "Executing Strategy A."
+
+// Устанавливаем стратегию B и выполняем стратегию
+$context->setStrategy(new ConcreteStrategyB());
+$context->executeStrategy(); // Выведет "Executing Strategy B."

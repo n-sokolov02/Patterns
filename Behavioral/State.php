@@ -84,3 +84,50 @@ $phone->volumeButtonPress(); // Вывод: Громкость меняется
  * Класс MobilePhone представляет контекст и содержит ссылку на текущее состояние.
  * Клиентский код может вызывать методы callButtonPress(), powerButtonPress() и volumeButtonPress() для телефона, и он будет реагировать соответственно в зависимости от текущего состояния.
  */
+
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Интерфейс состояния
+interface State {
+    public function handle();
+}
+
+// Конкретное состояние A
+class ConcreteStateA implements State {
+    public function handle() {
+        echo "Handling State A.\n";
+    }
+}
+
+// Конкретное состояние B
+class ConcreteStateB implements State {
+    public function handle() {
+        echo "Handling State B.\n";
+    }
+}
+
+// Класс контекста
+class Context {
+    private $state;
+
+    public function setState(State $state) {
+        $this->state = $state;
+    }
+
+    public function request() {
+        $this->state->handle();
+    }
+}
+
+// Используем паттерн Состояние
+$context = new Context();
+
+// Устанавливаем состояние A и выполняем запрос
+$context->setState(new ConcreteStateA());
+$context->request(); // Выведет "Handling State A."
+
+// Устанавливаем состояние B и выполняем запрос
+$context->setState(new ConcreteStateB());
+$context->request(); // Выведет "Handling State B."

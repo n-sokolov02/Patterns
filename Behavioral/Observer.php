@@ -83,3 +83,76 @@ $store->setDiscount("20%"); // Вывод: Пользователь John пол�
  * Когда изменяется скидка в магазине (setDiscount()), он уведомляет всех своих подписчиков с помощью метода notify().
  * Подписчики, реализуя интерфейс Observer, могут получать уведомления об изменениях и реагировать на них.
  * **/
+
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Интерфейс наблюдателя
+interface Observer2 {
+    public function update($data);
+}
+
+// Интерфейс субъекта
+interface Subject2 {
+    public function addObserver(Observer2 $observer);
+    public function removeObserver(Observer2 $observer);
+    public function notifyObservers();
+}
+
+// Конкретный класс субъекта
+class ConcreteSubject implements Subject2 {
+    private $observers = array();
+    private $data;
+
+    public function addObserver(Observer2 $observer) {
+        $this->observers[] = $observer;
+    }
+
+    public function removeObserver(Observer2 $observer) {
+        $index = array_search($observer, $this->observers);
+        if ($index !== false) {
+            array_splice($this->observers, $index, 1);
+        }
+    }
+
+    public function setData($data) {
+        $this->data = $data;
+        $this->notifyObservers();
+    }
+
+    public function getData() {
+        return $this->data;
+    }
+
+    public function notifyObservers() {
+        foreach ($this->observers as $observer) {
+            $observer->update($this->data);
+        }
+    }
+}
+
+// Конкретный класс наблюдателя
+class ConcreteObserver implements Observer2 {
+    public function update($data) {
+        echo "Received update with data: $data\n";
+    }
+}
+
+// Используем паттерн Наблюдатель
+$subject = new ConcreteSubject();
+$observer1 = new ConcreteObserver();
+$observer2 = new ConcreteObserver();
+
+// Добавляем наблюдателей к субъекту
+$subject->addObserver($observer1);
+$subject->addObserver($observer2);
+
+// Устанавливаем новое значение данных в субъекте
+$subject->setData("New data!");
+
+// Удаляем одного из наблюдателей
+$subject->removeObserver($observer2);
+
+// Устанавливаем еще одно значение данных в субъекте
+$subject->setData("Another update!");

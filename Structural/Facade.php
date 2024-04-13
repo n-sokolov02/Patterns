@@ -75,3 +75,52 @@ $orderFacade->placeOrder(123, "ул. Примерная, д. 10", 50.0);
  * Все это обрабатывается фасадом в едином интерфейсе для клиента.
  * Паттерн "Фасад" позволяет упростить взаимодействие с сложными системами, делая код более понятным, поддерживаемым и расширяемым.
  */
+
+
+
+//  ОБЛЕГЧЁННЫЙ ПРИМЕР
+
+// Сложная подсистема с несколькими классами
+class Order {
+    public function calculateTotal() {
+        // Логика для расчета общей стоимости заказа
+        return 100;
+    }
+}
+
+class PaymentProcessor {
+    public function processPayment($amount) {
+        // Логика для обработки платежа
+        echo "Payment processed for amount: $amount USD\n";
+    }
+}
+
+class EmailService {
+    public function sendConfirmationEmail() {
+        // Логика для отправки подтверждения по электронной почте
+        echo "Confirmation email sent.\n";
+    }
+}
+
+// Класс Фасада, предоставляющий простой интерфейс для взаимодействия с подсистемой
+class PaymentFacade {
+    private $order;
+    private $paymentProcessor;
+    private $emailService;
+
+    public function __construct() {
+        $this->order = new Order();
+        $this->paymentProcessor = new PaymentProcessor();
+        $this->emailService = new EmailService();
+    }
+
+    public function processOrder() {
+        $totalAmount = $this->order->calculateTotal();
+        $this->paymentProcessor->processPayment($totalAmount);
+        $this->emailService->sendConfirmationEmail();
+    }
+}
+
+// Используем простейший пример паттерна Фасад
+$paymentFacade = new PaymentFacade();
+$paymentFacade->processOrder();

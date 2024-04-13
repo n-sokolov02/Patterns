@@ -3,7 +3,7 @@
 interface Coffee {
     public function cost(): float;
     public function description(): string;
-}
+} //можно не использовать вроде !!!
 
 // ConcreteComponent (Конкретный компонент)
 class SimpleCoffee implements Coffee {
@@ -43,7 +43,7 @@ class MilkDecorator extends CoffeeDecorator {
         return parent::description() . ", с молоком";
     }
 }
-
+// 2nd ConcreteDecorator (2-ой Конкретный декоратор)
 class SyrupDecorator extends CoffeeDecorator {
     public function cost(): float {
         return parent::cost() + 0.5;
@@ -81,3 +81,71 @@ echo $coffeeWithMilkAndSyrup->description() . ", стоимость: $" . $coffe
  * Таким образом, мы использовали паттерн "Декоратор", чтобы динамически добавлять новую функциональность (молоко, сиропы) к базовому объекту (простой кофе) без необходимости изменения его класса.
  * Это позволяет нам создавать разнообразные кофейные напитки с помощью различных комбинаций декораторов.
  */
+
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Интерфейс Coffee
+interface Coffee {
+    public function getCost();
+    public function getDescription();
+}
+
+// Конкретный класс SimpleCoffee, представляющий простой кофе
+class SimpleCoffee implements Coffee {
+    public function getCost() {
+        return 5;
+    }
+
+    public function getDescription() {
+        return "Simple Coffee";
+    }
+}
+
+// Конкретный декоратор MilkDecorator, добавляющий молоко
+class MilkDecorator implements Coffee {
+    private $coffee;
+
+    public function __construct(Coffee $coffee) {
+        $this->coffee = $coffee;
+    }
+
+    public function getCost() {
+        return $this->coffee->getCost() + 2;
+    }
+
+    public function getDescription() {
+        return $this->coffee->getDescription() . ", Milk";
+    }
+}
+
+// Конкретный декоратор SugarDecorator, добавляющий сахар
+class SugarDecorator implements Coffee {
+    private $coffee;
+
+    public function __construct(Coffee $coffee) {
+        $this->coffee = $coffee;
+    }
+
+    public function getCost() {
+        return $this->coffee->getCost() + 1;
+    }
+
+    public function getDescription() {
+        return $this->coffee->getDescription() . ", Sugar";
+    }
+}
+
+// Используем простейший пример паттерна Декоратор
+$coffee = new SimpleCoffee();
+echo "Cost: " . $coffee->getCost() . " USD\n";
+echo "Description: " . $coffee->getDescription() . "\n";
+
+$coffeeWithMilk = new MilkDecorator($coffee);
+echo "Cost: " . $coffeeWithMilk->getCost() . " USD\n";
+echo "Description: " . $coffeeWithMilk->getDescription() . "\n";
+
+$coffeeWithMilkAndSugar = new SugarDecorator($coffeeWithMilk);
+echo "Cost: " . $coffeeWithMilkAndSugar->getCost() . " USD\n";
+echo "Description: " . $coffeeWithMilkAndSugar->getDescription() . "\n";

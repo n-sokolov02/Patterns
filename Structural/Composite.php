@@ -74,3 +74,46 @@ $taskList3->execute();
  * Затем клиентский код вызывает метод execute() для композита, и все элементы структуры выводятся на экран единообразно, без необходимости знать, является ли компонент листом или композитом.
  * Таким образом, мы использовали паттерн "Компоновщик", чтобы работать с отдельными задачами и списками задач единообразно в структуре иерархических компонентов.
  */
+
+
+
+// ОБЛЕГЧЁННЫЙ ПРИМЕР
+
+// Класс Author представляет автора книги
+class Author {
+    private $name;
+
+    public function __construct($name) {
+        $this->name = $name;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+}
+
+// Класс Book представляет книгу и содержит объект Author
+class Book {
+    private $title;
+    private $author;
+
+    public function __construct($title, Author $author) {
+        $this->title = $title;
+        $this->author = $author;
+    }
+
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function getAuthorName() {
+        return $this->author->getName();
+    }
+}
+
+// Используем облегченный пример паттерна Композиция
+$author = new Author("John Doe");
+$book = new Book("Sample Book", $author);
+
+echo "Book Title: " . $book->getTitle() . "\n";
+echo "Author Name: " . $book->getAuthorName() . "\n";

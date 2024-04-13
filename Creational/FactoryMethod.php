@@ -60,6 +60,54 @@ $strongEnemyCreator->someMethod(); // Выведет: Сильный враг а
  *
  *  В данном примере у нас есть интерфейс Enemy, определяющий общий интерфейс для всех типов врагов.
  *  Классы NormalEnemy и StrongEnemy являются конкретными продуктами, реализующими интерфейс Enemy.
- *  Затем у нас есть абстрактный класс EnemyCreator, который представляет абстрактного создателя, и у него есть абстрактный фабричный метод createEnemy(), который должен быть реализован подклассами. Конкретные создатели NormalEnemyCreator и StrongEnemyCreator реализуют фабричный метод и создают соответствующих врагов.
+ *  Затем у нас есть абстрактный класс EnemyCreator, который представляет абстрактного создателя, и у него есть абстрактный фабричный метод createEnemy(), который должен быть реализован подклассами.
+ *  Конкретные создатели NormalEnemyCreator и StrongEnemyCreator реализуют фабричный метод и создают соответствующих врагов.
  *  Клиентский код создает объекты врагов через создателей и вызывает метод someMethod(), который демонстрирует общую логику и вызывает фабричный метод для создания врагов. В результате каждый создатель создает врагов своего типа и выполняет их атаку.
  */
+
+
+
+//  ОБЛЕГЧЕННЫЙ ВАРИАНТ
+
+// Базовый класс Product
+class Product {
+    public function getName() {
+        return "Generic Product";
+    }
+}
+
+// Подкласс ProductA
+class ProductA extends Product {
+    public function getName() {
+        return "Product A";
+    }
+}
+
+// Подкласс ProductB
+class ProductB extends Product {
+    public function getName() {
+        return "Product B";
+    }
+}
+
+// Фабрика для создания объектов классов ProductA и ProductB
+class ProductFactory {
+    public static function createProduct($type) {
+        switch ($type) {
+            case 'A':
+                return new ProductA();
+            case 'B':
+                return new ProductB();
+            default:
+                throw new InvalidArgumentException("Invalid product type: $type");
+        }
+    }
+}
+
+// Используем фабрику для создания объектов
+$productA = ProductFactory::createProduct('A');
+$productB = ProductFactory::createProduct('B');
+
+// Выводим имена продуктов
+echo $productA->getName(); // Выведет "Product A"
+echo $productB->getName(); // Выведет "Product B"

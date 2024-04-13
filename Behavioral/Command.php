@@ -1,61 +1,76 @@
 <?php
+
 // Command (Команда)
-interface Command {
+interface Command
+{
     public function execute();
 }
 
 // ConcreteCommand (Конкретная команда) - Открытие файла
-class OpenFileCommand implements Command {
+class OpenFileCommand implements Command
+{
     private $file;
 
-    public function __construct(FileReceiver $file) {
+    public function __construct(FileReceiver $file)
+    {
         $this->file = $file;
     }
 
-    public function execute() {
+    public function execute()
+    {
         $this->file->open();
     }
 }
 
 // ConcreteCommand (Конкретная команда) - Сохранение файла
-class SaveFileCommand implements Command {
+class SaveFileCommand implements Command
+{
     private $file;
 
-    public function __construct(FileReceiver $file) {
+    public function __construct(FileReceiver $file)
+    {
         $this->file = $file;
     }
 
-    public function execute() {
+    public function execute()
+    {
         $this->file->save();
     }
 }
 
 // Receiver (Получатель, Исполнитель)
-class FileReceiver {
+class FileReceiver
+{
     private $filename;
 
-    public function __construct(string $filename) {
+    public function __construct(string $filename)
+    {
         $this->filename = $filename;
     }
 
-    public function open() {
+    public function open()
+    {
         echo "Файл {$this->filename} открыт\n";
     }
 
-    public function save() {
+    public function save()
+    {
         echo "Файл {$this->filename} сохранен\n";
     }
 }
 
 // Invoker (Инициатор)
-class FileInvoker {
+class FileInvoker
+{
     private $command;
 
-    public function setCommand(Command $command) {
+    public function setCommand(Command $command)
+    {
         $this->command = $command;
     }
 
-    public function execute() {
+    public function execute()
+    {
         $this->command->execute();
     }
 }
@@ -85,3 +100,89 @@ $invoker->execute(); // Вывод: Файл document.txt сохранен
  * Класс FileInvoker используется для выполнения команд.
  * Клиентский код может связывать команды с их получателями и вызывать команды через FileInvoker, не завися от конкретной реализации команд и их получателей.
  */
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Интерфейс команды
+interface Comand
+{
+    public function execute();
+}
+
+// Конкретная команда для включения светильника
+class LightOnCommand implements Comand
+{
+    private $light;
+
+    public function __construct(Light $light)
+    {
+        $this->light = $light;
+    }
+
+    public function execute()
+    {
+        $this->light->turnOn();
+    }
+}
+
+// Конкретная команда для выключения светильника
+class LightOffCommand implements Comand
+{
+    private $light;
+
+    public function __construct(Light $light)
+    {
+        $this->light = $light;
+    }
+
+    public function execute()
+    {
+        $this->light->turnOff();
+    }
+}
+
+// Класс светильника, который будет управляться командами
+class Light
+{
+    public function turnOn()
+    {
+        echo "Light is on.\n";
+    }
+
+    public function turnOff()
+    {
+        echo "Light is off.\n";
+    }
+}
+
+// Класс переключателя, который будет выполнять команды
+class Switching
+{
+    private $command;
+
+    public function setCommand(Comand $command)
+    {
+        $this->command = $command;
+    }
+
+    public function press()
+    {
+        $this->command->execute();
+    }
+}
+
+// Используем паттерн Команда
+$light = new Light();
+$lightOnCommand = new LightOnCommand($light);
+$lightOffCommand = new LightOffCommand($light);
+
+$switch = new Switching ();
+
+// Нажимаем переключатель для включения светильника
+$switch->setCommand($lightOnCommand);
+$switch->press(); // Выведет "Light is on."
+
+// Нажимаем переключатель для выключения светильника
+$switch->setCommand($lightOffCommand);
+$switch->press(); // Выведет "Light is off."

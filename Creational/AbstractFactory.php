@@ -95,3 +95,86 @@ createFurniture($modernStyle);
  * Каждая фабрика создает продукты своего семейства (классические или современные стулья и столы).
  * Клиентский код использует абстрактную фабрику для создания мебели разных стилей, не зависимо от их конкретных классов.
  */
+
+
+//  ОБЛЕГЧЕННЫЙ ВАРИАНТ
+
+// Абстрактный класс для продукта ProductA
+abstract class ProductA {
+    abstract public function getName();
+}
+
+// Два конкретных класса для продукта ProductA - Variant1 и Variant2
+class ProductA_Variant1 extends ProductA {
+    public function getName() {
+        return "Product A - Variant 1";
+    }
+}
+
+class ProductA_Variant2 extends ProductA {
+    public function getName() {
+        return "Product A - Variant 2";
+    }
+}
+
+// Абстрактный класс для продукта ProductB
+abstract class ProductB {
+    abstract public function getName();
+}
+
+// Два конкретных класса для продукта ProductB - Variant1 и Variant2
+class ProductB_Variant1 extends ProductB {
+    public function getName() {
+        return "Product B - Variant 1";
+    }
+}
+
+class ProductB_Variant2 extends ProductB {
+    public function getName() {
+        return "Product B - Variant 2";
+    }
+}
+
+// Абстрактная фабрика для создания семейства продуктов
+abstract class AbstractFactory {
+    abstract public function createProductA();
+    abstract public function createProductB();
+}
+
+// Конкретная фабрика для создания семейства продуктов вариантов Variant1
+class Variant1Factory extends AbstractFactory {
+    public function createProductA() {
+        return new ProductA_Variant1();
+    }
+
+    public function createProductB() {
+        return new ProductB_Variant1();
+    }
+}
+
+// Конкретная фабрика для создания семейства продуктов вариантов Variant2
+class Variant2Factory extends AbstractFactory {
+    public function createProductA() {
+        return new ProductA_Variant2();
+    }
+
+    public function createProductB() {
+        return new ProductB_Variant2();
+    }
+}
+
+// Используем абстрактную фабрику для создания продуктов
+function clientCode(AbstractFactory $factory) {
+    $productA = $factory->createProductA();
+    $productB = $factory->createProductB();
+
+    echo $productA->getName() . "\n";
+    echo $productB->getName() . "\n";
+}
+
+// Создаем экземпляр абстрактной фабрики и вызываем клиентский код
+echo "Using Variant1 Factory:\n";
+clientCode(new Variant1Factory());
+
+echo "\nUsing Variant2 Factory:\n";
+clientCode(new Variant2Factory());

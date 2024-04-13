@@ -110,11 +110,6 @@ $director->buildReport();
 $simpleReport = $director->getReport();
 $simpleReport->show();
 
-$director = new ReportDirector($complexBuilder);
-$director->buildReport();
-$complexReport = $director->getReport();
-$complexReport->show();
-
 /*
  * Пример симуляции паттерна "Строитель" в реальной жизни: Представьте, что у вас есть класс для создания сложных отчетов.
  * Отчеты могут иметь различные стили, форматы, заголовки, таблицы и т. д.
@@ -123,7 +118,84 @@ $complexReport->show();
  *
  *
  * В данном примере у нас есть класс Report, представляющий отчет, и интерфейс ReportBuilder, определяющий методы для создания отчета в различных стилях.
- * У нас есть два конкретных строителя - SimpleReportBuilder и ComplexReportBuilder, которые реализуют интерфейс ReportBuilder и создают отчеты в простом и сложном стиле соответственно.
+ * У нас есть конкретный строитель - SimpleReportBuilder, который реализуют интерфейс ReportBuilder и создают отчеты в простом и сложном стиле соответственно.
  * Также у нас есть класс ReportDirector, который управляет процессом сборки отчета с помощью строителя.
  * Клиентский код создает отчеты в разных стилях с помощью директора и строителей.
  */
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Класс продукта
+class Product {
+    private $name;
+    private $size;
+    private $color;
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    public function setSize($size) {
+        $this->size = $size;
+    }
+
+    public function setColor($color) {
+        $this->color = $color;
+    }
+
+    public function getDescription() {
+        return "Product: {$this->name}, Size: {$this->size}, Color: {$this->color}";
+    }
+}
+
+// Интерфейс строителя продукта
+interface ProductBuilder {
+    public function setName($name);
+    public function setSize($size);
+    public function setColor($color);
+    public function getProduct();
+}
+
+// Конкретный строитель продукта
+class ConcreteProductBuilder implements ProductBuilder {
+    private $product;
+
+    public function __construct() {
+        $this->product = new Product();
+    }
+
+    public function setName($name) {
+        $this->product->setName($name);
+    }
+
+    public function setSize($size) {
+        $this->product->setSize($size);
+    }
+
+    public function setColor($color) {
+        $this->product->setColor($color);
+    }
+
+    public function getProduct() {
+        return $this->product;
+    }
+}
+
+// Директор, который управляет процессом создания продукта
+class Director {
+    public function buildProduct(ProductBuilder $builder) {
+        $builder->setName('Sample Product');
+        $builder->setSize('Large');
+        $builder->setColor('Red');
+    }
+}
+
+// Используем паттерн Строитель
+$builder = new ConcreteProductBuilder();
+$director = new Director();
+
+$director->buildProduct($builder);
+$product = $builder->getProduct();
+
+echo $product->getDescription();

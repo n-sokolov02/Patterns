@@ -47,3 +47,45 @@ $connection = $connection1->getConnection();
  * Если экземпляр уже создан, метод возвращает его, если нет - создает новый экземпляр и возвращает его.
  * Клиентский код вызывает статический метод getInstance() для получения единственного экземпляра класса DatabaseConnection. В результате $connection1 и $connection2 ссылаются на один и тот же экземпляр, что подтверждается выводом true при сравнении их по ссылке.
  */
+
+
+
+
+//  ОБЛЕГЧЁННЫЙ ВАРИАНТ
+
+// Пример простейшего класса Одиночка (Singleton)
+class Singleton {
+    private static $instance;
+
+    // Защищаем конструктор от создания через оператор "new"
+    private function __construct() {}
+
+    // Защищаем от создания через клонирование
+    private function __clone() {}
+
+    // Защищаем от создания через unserialize
+    private function __wakeup() {}
+
+    // Метод для получения экземпляра класса
+    public static function getInstance() {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    // Метод, который демонстрирует, что одиночка работает
+    public function showMessage() {
+        echo "Hello, I am a Singleton!\n";
+    }
+}
+
+// Используем класс Одиночка для получения экземпляра и вызова метода showMessage
+$instance1 = Singleton::getInstance();
+$instance1->showMessage();
+
+$instance2 = Singleton::getInstance();
+$instance2->showMessage();
+
+// Проверяем, что экземпляры одинаковые
+var_dump($instance1 === $instance2); // Выведет bool(true), потому что это один и тот же объект
